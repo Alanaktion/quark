@@ -1,0 +1,8 @@
+{
+  "name": "quark",
+  "version": "0.1.0",
+  "main": "app.js",
+  "devDependencies": {
+    "electron-prebuilt": "^0.37.8"
+  }
+}
