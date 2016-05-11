@@ -5,12 +5,48 @@
  * @link   http://electron.atom.io/docs/v0.37.8/api/web-view-tag/
  */
 var Browser = {
-  currentTab: 0,
-  lastTab: 0,
+  tabs: [],
+  webviews: [],
+  currentTab: null,
+  lastTab: -1,
+  newTab: function(url, activate) {
+    var id = ++Browser.lastTab;
+    console.log(url, activate, id);
+
+    // Create webview
+    var webview = document.createElement('webview');
+    webview.src = url;
+    webview.setAttribute('partition', 'persist:ext');
+    webview.dataset.id = id;
+    document.getElementById('webview-list').appendChild(webview);
+    webview.removeAttribute('tabindex');
+    Browser.webviews.push(webview);
+    registerWebviewEvents(webview);
+    console.log(webview);
+
+    // Create tab
+    var tab = document.createElement('button');
+    tab.classList.add('tab');
+    tab.dataset.id = id;
+    Browser.tabs.push(tab);
+    document.getElementById('tabbar').insertBefore(tab, document.getElementById('btn-newtab'));
+    console.log(tab);
+
+    // Switch to new tab
+    if (activate) {
+      Browser.switchTab(id);
+    }
+
+    return id;
+  },
   switchTab: function(id) {
-    console.log('switchTab(' + id + ')');
-    var webview = document.querySelector('#webview-list webview[data-id="' + id + '"]'),
+    // var webview = document.querySelector('#webview-list webview[data-id="' + id + '"]'),
+      // tab = document.querySelector('#tabbar .tab[data-id="' + id + '"]'),
+    var webview = this.webviews[id],
+      tab = this.tabs[id],
       items, item, i;
+
+    console.log(webview);
 
     // Set active webview
     items = document.querySelectorAll('#webview-list webview');
@@ -24,20 +60,25 @@ var Browser = {
     for (i = 0; item = items[i]; i++) {
       item.classList.remove('active');
     }
-    document.querySelector('#tabbar .tab[data-id="' + id + '"]').classList.add('active');
+    tab.classList.add('active');
 
     // Set address
-    document.getElementById('address-bar').value = webview.getURL();
+    if('getURL' in webview) {
+      document.getElementById('address-bar').value = webview.getURL();
+    }
 
     this.currentTab = id;
     webview.focus();
+    return webview;
   },
   navigate: function(url) {
     if(!url) {
       url = 'about:blank';
     }
     var webview = document.querySelector('#webview-list webview[data-id="' + Browser.currentTab + '"]');
+
     webview.src = url;
+    return webview;
   }
 };
 
@@ -61,8 +102,37 @@ document.getElementById('address-box').addEventListener('submit', function(e) {
   e.preventDefault();
 });
 
+// Handle new tab button
+document.getElementById('btn-newtab').addEventListener('click', function(e) {
+  Browser.newTab('about:blank', true);
+});
+
+
 /*
 Webview Events
 */
+var registerWebviewEvents = function(webview) {
 
+  // Finished navigation
+  webview.addEventListener('did-navigate', function(e) {
+    console.log(e);
+    if (webview.dataset.id === Browser.currentTab) {
+      document.getElementById('address-bar').value = webview.getURL();
+      document.querySelector('#tabbar .tab[data-id="' + Browser.currentTab + '"]').textContent = webview.getTitle();
+    }
+  });
 
+  // DOM Ready
+  webview.addEventListener('dom-ready', function(e) {
+    console.log(e);
+    if (webview.dataset.id === Browser.currentTab) {
+      document.querySelector('#tabbar .tab[data-id="' + Browser.currentTab + '"]').textContent = webview.getTitle();
+    }
+  });
+
+};
+
+/*
+Initialize new window
+*/
+Browser.newTab('about:blank', true);
