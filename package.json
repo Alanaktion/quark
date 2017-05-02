@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "main": "app.js",
   "devDependencies": {
-    "electron-prebuilt": "^0.37.8"
+    "electron": "^1.6.6"
+  },
+  "dependencies": {
+    "octicons": "^5.0.1"
   }
 }

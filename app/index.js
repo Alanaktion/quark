@@ -135,4 +135,13 @@ var registerWebviewEvents = function(webview) {
 /*
 Initialize new window
 */
+(function() {
+  var octicons = require('octicons');
+  var iconButtons = document.querySelectorAll('button[data-octicon]');
+  var button;
+  for (var i = 0; i < iconButtons.length; i++) {
+    button = iconButtons[i];
+    button.innerHTML = octicons[button.getAttribute('data-octicon')].toSVG();
+  }
+})();
 Browser.newTab('about:blank', true);

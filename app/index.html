@@ -4,31 +4,21 @@
     <meta charset="UTF-8">
     <title>Quark</title>
     <link rel="stylesheet" type="text/css" href="./index.css">
-    <link rel="stylesheet" type="text/css" href="../bower_components/octicons/octicons/octicons.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/octicons/build/octicons.css">
   </head>
   <body>
     <div id="topbar">
       <div id="tabbar">
         <!-- <button class="tab active" data-id="0">New Tab</button> -->
-        <button class="btn" id="btn-newtab" title="New Tab">
-          <span class="octicon octicon-plus"></span>
-        </button>
+        <button class="btn" id="btn-newtab" title="New Tab" data-octicon="plus"></button>
       </div>
       <div id="navbar">
-        <button class="btn navgroup-left" title="Back">
-          <span class="octicon octicon-triangle-left"></span>
-        </button>
-        <button class="btn navgroup-right" title="Forward">
-          <span class="octicon octicon-triangle-right"></span>
-        </button>
-        <button class="btn" title="Reload">
-          <span class="octicon octicon-sync"></span>
-        </button>
+        <button class="btn navgroup-left" title="Back" data-octicon="triangle-left"></button>
+        <button class="btn navgroup-right" title="Forward" data-octicon="triangle-right"></button>
+        <button class="btn" title="Reload" data-octicon="sync"></button>
         <form id="address-box">
           <input type="text" class="navbar-input navgroup-left" id="address-bar">
-          <button class="btn navgroup-right" title="Go">
-            <span class="octicon octicon-chevron-right"></span>
-          </button>
+          <button class="btn navgroup-right" title="Go" data-octicon="chevron-right"></button>
         </form>
       </div>
     </div>
